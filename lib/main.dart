@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:message/page/register.dart';
+import 'package:message/util/color.dart';
 import './page/login.dart';
 
 
@@ -9,15 +11,16 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
+        scaffoldBackgroundColor: scaffoldBackground,
         primarySwatch: Colors.deepOrange,
         accentColor: Colors.orange,
         textTheme: TextTheme(
           body1: TextStyle(fontFamily: 'Montserrat'),
-        )
+        ),
       ),
       title: 'Message',
       debugShowCheckedModeBanner: false,
-      home: Login(),
+      home: Register(),
     );
   }
 }

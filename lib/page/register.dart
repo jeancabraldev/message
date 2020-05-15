@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:message/util/color.dart';
 
 import '../widget/path.dart';
 
-class Login extends StatefulWidget {
+class Register extends StatefulWidget {
   @override
-  _LoginState createState() => _LoginState();
+  _RegisterState createState() => _RegisterState();
 }
 
-class _LoginState extends State<Login> {
+class _RegisterState extends State<Register> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,7 +23,10 @@ class _LoginState extends State<Login> {
                   gradient: LinearGradient(
                     begin: Alignment.topRight,
                     end: Alignment.bottomLeft,
-                    colors: [Colors.deepOrange, Colors.orange],
+                    colors: [
+                      Colors.deepOrange,
+                      Colors.orange,
+                    ],
                   ),
                 ),
                 child: Column(
@@ -36,7 +38,7 @@ class _LoginState extends State<Login> {
                       child: Image.asset('asset/image/message.png'),
                     ),
                     Text(
-                      'App Message',
+                      'Cadastro',
                       style: TextStyle(
                           fontSize: 26,
                           color: Colors.white,
@@ -52,12 +54,11 @@ class _LoginState extends State<Login> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
                   TextField(
-                    //autofocus: true,
-                    keyboardType: TextInputType.emailAddress,
+                    keyboardType: TextInputType.text,
                     style: TextStyle(fontSize: 20, fontFamily: 'Montserrat'),
                     decoration: InputDecoration(
                         contentPadding: EdgeInsets.fromLTRB(30, 14, 30, 14),
-                        hintText: 'E-mail',
+                        hintText: 'Nome',
                         filled: true,
                         fillColor: Colors.white,
                         border: OutlineInputBorder(
@@ -65,63 +66,51 @@ class _LoginState extends State<Login> {
                         )),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(top: 10, bottom: 20),
+                    padding: const EdgeInsets.only(top: 10, bottom: 10),
                     child: TextField(
-                      keyboardType: TextInputType.text,
+                      keyboardType: TextInputType.emailAddress,
                       style: TextStyle(fontSize: 20, fontFamily: 'Montserrat'),
                       decoration: InputDecoration(
                           contentPadding: EdgeInsets.fromLTRB(30, 14, 30, 14),
-                          hintText: 'Senha',
+                          hintText: 'E-mail',
                           filled: true,
                           fillColor: Colors.white,
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(30))),
-                      obscureText: true,
                     ),
                   ),
-                  RaisedButton(
-                    child: Text(
-                      'Entrar',
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.white,
-                      ),
-                    ),
-                    color: Colors.deepOrange,
-                    padding: EdgeInsets.fromLTRB(30, 14, 30, 14),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30)),
-                    onPressed: () {},
+                  TextField(
+                    keyboardType: TextInputType.text,
+                    style: TextStyle(fontSize: 20, fontFamily: 'Montserrat'),
+                    decoration: InputDecoration(
+                        contentPadding: EdgeInsets.fromLTRB(30, 14, 30, 14),
+                        hintText: 'Senha',
+                        filled: true,
+                        fillColor: Colors.white,
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(30))),
+                    obscureText: true,
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(top: 20),
-                    child: Container(
-                      padding: EdgeInsets.only(bottom: 10),
-                      child: GestureDetector(
-                        child: Center(
-                          child: RichText(
-                            text: TextSpan(children: [
-                              TextSpan(
-                                  text: 'Não tem uma conta? ',
-                                  style: styleTextSpan),
-                              TextSpan(
-                                  text: 'Cadastre-se',
-                                  style: TextStyle(
-                                    fontFamily: 'Montserrat',
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16,
-                                    color: Colors.black,
-                                  ))
-                            ]),
-                          ),
+                    padding: const EdgeInsets.only(top: 20, bottom: 10),
+                    child: RaisedButton(
+                      child: Text(
+                        'Cadastrar',
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.white,
                         ),
-                        onTap: () {},
                       ),
+                      color: Colors.deepOrange,
+                      padding: EdgeInsets.fromLTRB(30, 14, 30, 14),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30)),
+                      onPressed: () {},
                     ),
-                  )
+                  ),
                 ],
               ),
-            ),
+            )
           ],
         ),
       ),
