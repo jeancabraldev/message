@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+
+import 'package:message/page/register.dart';
 import 'package:message/util/color.dart';
 
 import '../widget/path.dart';
@@ -24,7 +26,10 @@ class _LoginState extends State<Login> {
                   gradient: LinearGradient(
                     begin: Alignment.topRight,
                     end: Alignment.bottomLeft,
-                    colors: [Colors.deepOrange, Colors.orange],
+                    colors: [
+                      Colors.orange,
+                      Colors.deepOrange,
+                    ],
                   ),
                 ),
                 child: Column(
@@ -52,7 +57,6 @@ class _LoginState extends State<Login> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
                   TextField(
-                    //autofocus: true,
                     keyboardType: TextInputType.emailAddress,
                     style: TextStyle(fontSize: 20, fontFamily: 'Montserrat'),
                     decoration: InputDecoration(
@@ -115,7 +119,14 @@ class _LoginState extends State<Login> {
                             ]),
                           ),
                         ),
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => Register(),
+                            ),
+                          );
+                        },
                       ),
                     ),
                   )

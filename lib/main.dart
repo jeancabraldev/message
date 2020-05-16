@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:message/page/register.dart';
 import 'package:message/util/color.dart';
 import './page/login.dart';
 
@@ -20,7 +19,7 @@ class MyApp extends StatelessWidget {
       ),
       title: 'Message',
       debugShowCheckedModeBanner: false,
-      home: Register(),
+      home: Login(),
     );
   }
 }
