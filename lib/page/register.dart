@@ -1,4 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:message/model/user.dart';
+import 'package:message/page/home.dart';
 import 'package:message/util/color.dart';
 
 import '../widget/path.dart';
@@ -16,13 +20,13 @@ class _RegisterState extends State<Register> {
 
   String _messageError = '';
 
-  validateFields() {
+  _validateFields() {
     //Recuperando os valores dos campos
     String name = _controllerName.text;
     String email = _controllerEmail.text;
     String password = _controllerPassword.text;
 
-    displayMessageError(String msg) {
+    _displayMessageError(String msg) {
       setState(() {
         _messageError = msg;
       });
@@ -37,27 +41,62 @@ class _RegisterState extends State<Register> {
           //Verificando se o campo senha esta vazio
           if (password.isNotEmpty) {
             //Verificando se a senha digitada possui 8 caracteres
-            if(password.length >= 8){
-              displayMessageError('');
-            }else{
-              displayMessageError('Sua senha deve ter mais de 7 digitos');
+            if (password.length > 6) {
+              _displayMessageError('');
+
+              //instanciando classe User
+              User user = User();
+              user.name = name;
+              user.email = email;
+              user.password = password;
+              _registerUser(user);
+            } else {
+              _displayMessageError('Sua senha deve ter mais de 6 digitos');
             }
           } else {
-            displayMessageError('Digite sua senha');
+            _displayMessageError('Digite sua senha');
           }
         } else {
-          displayMessageError('Digite um e-mail válido');
+          _displayMessageError('Digite um e-mail válido');
         }
       } else {
         setState(() {
-          displayMessageError('Seu nome deve possuir mais de 3 letras');
+          _displayMessageError('Seu nome deve possuir mais de 3 letras');
         });
       }
     } else {
       setState(() {
-        displayMessageError('Digite seu nome');
+        _displayMessageError('Digite seu nome');
       });
     }
+  }
+
+  _registerUser(User user) {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    auth
+        .createUserWithEmailAndPassword(
+      email: user.email,
+      password: user.password,
+    )
+        .then((firebaseUser) {
+      //Salvando dados do usuário
+      Firestore db = Firestore.instance;
+      db.collection('users')
+          .document(firebaseUser.user.uid)
+          .setData(user.toMap());
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => Home(),
+        ),
+      );
+    }).catchError((e) {
+      print('Erro: ' + e.toString());
+      setState(() {
+        _messageError = 'Erro ao cadastrar usuário';
+      });
+    });
   }
 
   @override
@@ -186,7 +225,7 @@ class _RegisterState extends State<Register> {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30)),
                       onPressed: () {
-                        validateFields();
+                        _validateFields();
                       },
                     ),
                   ),
