@@ -4,6 +4,7 @@ import 'package:message/model/user.dart';
 import 'package:message/page/home.dart';
 
 import 'package:message/page/register.dart';
+import 'package:message/route/generating_route.dart';
 import 'package:message/util/color.dart';
 
 import '../widget/path.dart';
@@ -17,15 +18,6 @@ class _LoginState extends State<Login> {
   TextEditingController _controllerEmail = TextEditingController();
   TextEditingController _controllerPassword = TextEditingController();
   String _messageError = '';
-
-  _routerPush() {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => Home(),
-      ),
-    );
-  }
 
   _displayMessageError(String msg) {
     setState(() {
@@ -70,7 +62,7 @@ class _LoginState extends State<Login> {
       password: user.password,
     )
         .then((firebaseUser) {
-      _routerPush();
+      Navigator.pushReplacementNamed(context, GeneratingRoute.ROUTE_HOME);
     }).catchError((e) {
       setState(() {
         _displayMessageError('Erro de autenticação');
@@ -86,7 +78,7 @@ class _LoginState extends State<Login> {
     FirebaseUser userLogin = await auth.currentUser();
 
     if (userLogin != null) {
-      _routerPush();
+      Navigator.pushReplacementNamed(context, GeneratingRoute.ROUTE_HOME);
     }
   }
 

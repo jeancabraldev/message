@@ -1,8 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:message/page/login.dart';
-import 'package:message/page/tab/contact.dart';
-import 'package:message/page/tab/conversation.dart';
+import 'package:message/page/tab/tab_contact.dart';
+import 'package:message/page/tab/tab_conversation.dart';
+import 'package:message/route/generating_route.dart';
 import 'package:message/util/color.dart';
 
 class Home extends StatefulWidget {
@@ -45,16 +46,14 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   _logout() async {
     FirebaseAuth auth = FirebaseAuth.instance;
     await auth.signOut();
-    Navigator.push(context, MaterialPageRoute(
-      builder: (context) => Login(),
-    ));
+    Navigator.pushReplacementNamed(context, GeneratingRoute.ROUTE_LOGIN);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          automaticallyImplyLeading: false,
+          //automaticallyImplyLeading: false,
           backgroundColor: appBarColor,
           title: Text('App Message'),
           bottom: TabBar(
@@ -84,8 +83,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         body: TabBarView(
           controller: _controllerTab,
           children: <Widget>[
-            Conversation(),
-            Contact(),
+            TabConversation(),
+            TabContact(),
           ],
         ));
   }

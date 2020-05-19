@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:message/model/user.dart';
 import 'package:message/page/home.dart';
+import 'package:message/route/generating_route.dart';
 import 'package:message/util/color.dart';
 
 import '../widget/path.dart';
@@ -81,16 +82,13 @@ class _RegisterState extends State<Register> {
         .then((firebaseUser) {
       //Salvando dados do usuário
       Firestore db = Firestore.instance;
-      db.collection('users')
+      db
+          .collection('users')
           .document(firebaseUser.user.uid)
           .setData(user.toMap());
 
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => Home(),
-        ),
-      );
+      Navigator.pushNamedAndRemoveUntil(
+          context, GeneratingRoute.ROUTE_HOME, (_) => false);
     }).catchError((e) {
       print('Erro: ' + e.toString());
       setState(() {

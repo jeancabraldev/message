@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:message/route/generating_route.dart';
 import 'package:message/util/color.dart';
 import './page/login.dart';
 
@@ -19,6 +20,8 @@ class MyApp extends StatelessWidget {
       ),
       title: 'Message',
       debugShowCheckedModeBanner: false,
+      initialRoute: '/',
+      onGenerateRoute: GeneratingRoute.generatingRoute,
       home: Login(),
     );
   }
