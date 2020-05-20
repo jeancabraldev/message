@@ -3,7 +3,6 @@ import 'package:message/route/generating_route.dart';
 import 'package:message/util/color.dart';
 import './page/login.dart';
 
-
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -12,19 +11,14 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(
         scaffoldBackgroundColor: scaffoldBackground,
-        primarySwatch: Colors.deepOrange,
-        accentColor: Colors.orange,
-        textTheme: TextTheme(
-          body1: TextStyle(fontFamily: 'Montserrat'),
-        ),
+        primaryColor: linearGradientDark,
+        accentColor: linearGradientClear,
+        fontFamily: 'Montserrat',
       ),
       title: 'Message',
       debugShowCheckedModeBanner: false,
       initialRoute: '/',
       onGenerateRoute: GeneratingRoute.generatingRoute,
-      home: Login(),
     );
   }
 }
-
-

@@ -35,7 +35,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   _itemMenu(String item) {
     switch (item) {
       case 'Configurações':
-        print('Confiurações');
+        Navigator.pushNamed(context, GeneratingRoute.ROUTE_CONFIG);
         break;
       case 'Sair da conta':
         _logout();
@@ -54,7 +54,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     return Scaffold(
         appBar: AppBar(
           //automaticallyImplyLeading: false,
-          backgroundColor: appBarColor,
+          backgroundColor: linearGradientDark,
           title: Text('App Message'),
           bottom: TabBar(
             indicatorWeight: 4,
@@ -62,7 +62,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             controller: _controllerTab,
             indicatorColor: Colors.white,
             tabs: <Widget>[
-              Tab(text: 'Conversas'),
+              Tab(text: 'Conversas',),
               Tab(text: 'Contatos'),
             ],
           ),

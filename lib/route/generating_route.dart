@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:message/page/config.dart';
 import 'package:message/page/home.dart';
 import 'package:message/page/login.dart';
 import 'package:message/page/register.dart';
@@ -10,6 +11,7 @@ class GeneratingRoute {
   static const String ROUTE_LOGIN = '/login';
   static const String ROUTE_REGISTER = '/register';
   static const String ROUTE_HOME = '/home';
+  static const String ROUTE_CONFIG = '/config';
 
   static Route<dynamic> generatingRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -21,6 +23,8 @@ class GeneratingRoute {
         return MaterialPageRoute(builder: (_) => Register());
       case ROUTE_HOME:
         return MaterialPageRoute(builder: (_) => Home());
+      case ROUTE_CONFIG:
+        return MaterialPageRoute(builder: (_) => Config());
       default:
         _errorRoute();
     }

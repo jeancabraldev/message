@@ -2,9 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:message/model/user.dart';
-import 'package:message/page/home.dart';
 import 'package:message/route/generating_route.dart';
 import 'package:message/util/color.dart';
+
 
 import '../widget/path.dart';
 
@@ -114,8 +114,8 @@ class _RegisterState extends State<Register> {
                     begin: Alignment.topRight,
                     end: Alignment.bottomLeft,
                     colors: [
-                      Colors.orange,
-                      Colors.deepOrange,
+                      linearGradientClear,
+                      linearGradientDark,
                     ],
                   ),
                 ),
@@ -218,7 +218,7 @@ class _RegisterState extends State<Register> {
                           color: Colors.white,
                         ),
                       ),
-                      color: Colors.deepOrange,
+                      color: linearGradientClear,
                       padding: EdgeInsets.fromLTRB(30, 14, 30, 14),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30)),

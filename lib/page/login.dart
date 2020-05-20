@@ -104,8 +104,8 @@ class _LoginState extends State<Login> {
                     begin: Alignment.topRight,
                     end: Alignment.bottomLeft,
                     colors: [
-                      Colors.orange,
-                      Colors.deepOrange,
+                      linearGradientClear,
+                      linearGradientDark,
                     ],
                   ),
                 ),
@@ -183,7 +183,7 @@ class _LoginState extends State<Login> {
                         color: Colors.white,
                       ),
                     ),
-                    color: Colors.deepOrange,
+                    color: linearGradientClear,
                     padding: EdgeInsets.fromLTRB(30, 14, 30, 14),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30)),

@@ -30,7 +30,6 @@ class _TabConversationState extends State<TabConversation> {
           contentPadding: EdgeInsets.fromLTRB(16, 8, 16, 8),
           leading: CircleAvatar(
             maxRadius: 30,
-            minRadius: 30,
             backgroundColor: Colors.grey,
             backgroundImage: NetworkImage(
               conversation.image
