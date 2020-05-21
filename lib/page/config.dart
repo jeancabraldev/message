@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:message/util/color.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class Config extends StatefulWidget {
   @override
@@ -7,6 +11,86 @@ class Config extends StatefulWidget {
 }
 
 class _ConfigState extends State<Config> {
+  TextEditingController _controllerName = TextEditingController();
+  File _image;
+  String _idUserLogged;
+  bool _upImage = false;
+  String _recoveredUrlImage;
+
+  /*
+  Escolhendo um foto para o perfil do usuário utilizandp a galeria de imagens
+  ou a camera
+  */
+  Future _recoverImage(String sourceImage) async {
+    File selectedImage;
+    switch (sourceImage) {
+      case 'camera':
+        selectedImage = await ImagePicker.pickImage(source: ImageSource.camera);
+        break;
+      case 'galeria':
+        selectedImage =
+            await ImagePicker.pickImage(source: ImageSource.gallery);
+        break;
+    }
+
+    setState(() {
+      _image = selectedImage;
+      //verificando se a imagem foi capturada
+      if (_image != null) {
+        _upImage = true;
+        _uploadImage();
+      }
+    });
+  }
+
+  Future _uploadImage() async {
+    FirebaseStorage storage = FirebaseStorage.instance;
+    StorageReference folderRoot = storage.ref();
+    StorageReference archive =
+        folderRoot.child('profile').child(_idUserLogged + '.jpg');
+
+    //upload image
+    StorageUploadTask task = archive.putFile(_image);
+
+    //Controlando o progresso do upload da imagem
+    task.events.listen((StorageTaskEvent storageTaskEvent) {
+      if (storageTaskEvent.type == StorageTaskEventType.progress) {
+        setState(() {
+          _upImage = true;
+        });
+      } else if (storageTaskEvent.type == StorageTaskEventType.success) {
+        setState(() {
+          _upImage = false;
+        });
+      }
+    });
+
+    //Recuperando URL da imagem
+    task.onComplete.then((StorageTaskSnapshot snapshot) {
+      _recoverUrlImage(snapshot);
+    });
+  }
+
+  Future _recoverUrlImage(StorageTaskSnapshot snapshot) async {
+    String url = await snapshot.ref.getDownloadURL();
+    setState(() {
+      _recoveredUrlImage = url;
+    });
+  }
+
+  //Recuperando dados do usuário
+  _recoverUserData() async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    FirebaseUser userLogged = await auth.currentUser();
+    _idUserLogged = userLogged.uid;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _recoverUserData();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,9 +109,10 @@ class _ConfigState extends State<Config> {
                   padding: const EdgeInsets.only(bottom: 10),
                   child: CircleAvatar(
                     radius: 100,
-                    backgroundColor: Colors.black38,
-                    backgroundImage: NetworkImage(
-                        'https://firebasestorage.googleapis.com/v0/b/message-9fad0.appspot.com/o/profile%2Fperfil1.jpg?alt=media&token=c9707b0d-87f5-47fe-b887-fe3cae3ace53'),
+                    backgroundColor: Colors.black26,
+                    backgroundImage: _recoveredUrlImage != null
+                        ? NetworkImage(_recoveredUrlImage)
+                        : null,
                   ),
                 ),
                 Row(
@@ -35,7 +120,7 @@ class _ConfigState extends State<Config> {
                   children: <Widget>[
                     FlatButton.icon(
                       onPressed: () {
-                        print('Camera');
+                        _recoverImage('camera');
                       },
                       icon: Icon(
                         Icons.photo_camera,
@@ -51,7 +136,7 @@ class _ConfigState extends State<Config> {
                     ),
                     FlatButton.icon(
                       onPressed: () {
-                        print('Album');
+                        _recoverImage('galeria');
                       },
                       icon: Icon(
                         Icons.photo,
@@ -70,6 +155,7 @@ class _ConfigState extends State<Config> {
                 Padding(
                   padding: EdgeInsets.fromLTRB(0, 10, 0, 50),
                   child: TextField(
+                    controller: _controllerName,
                     keyboardType: TextInputType.text,
                     textAlign: TextAlign.center,
                     style: TextStyle(
@@ -78,6 +164,7 @@ class _ConfigState extends State<Config> {
                       fontWeight: FontWeight.bold,
                     ),
                     decoration: InputDecoration(
+                      border: InputBorder.none,
                       contentPadding: EdgeInsets.fromLTRB(30, 14, 30, 14),
                       hintText: 'Vitória Silva',
                       filled: true,
@@ -87,7 +174,7 @@ class _ConfigState extends State<Config> {
                 ),
                 RaisedButton(
                   child: Text(
-                    'Salvar alteração',
+                    'Salvar alterações',
                     style: TextStyle(
                       fontSize: 20,
                       color: Colors.white,
@@ -97,8 +184,11 @@ class _ConfigState extends State<Config> {
                   padding: EdgeInsets.fromLTRB(30, 12, 30, 12),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30)),
-                  onPressed: () {
-                  },
+                  onPressed: () {},
+                ),
+                Container(
+                  padding: EdgeInsets.only(top: 10, bottom: 10),
+                  child: _upImage ? CircularProgressIndicator() : Container(),
                 ),
               ],
             ),
