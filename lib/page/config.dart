@@ -4,6 +4,7 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Config extends StatefulWidget {
   @override
@@ -73,9 +74,25 @@ class _ConfigState extends State<Config> {
 
   Future _recoverUrlImage(StorageTaskSnapshot snapshot) async {
     String url = await snapshot.ref.getDownloadURL();
+    _updateUrlImage(url);
     setState(() {
       _recoveredUrlImage = url;
     });
+  }
+
+  _updateUrlImage(String url) {
+    Firestore db = Firestore.instance;
+
+    Map<String, dynamic> updateImageUrl = {'urlImage': url};
+
+    db.collection('users').document(_idUserLogged).updateData(updateImageUrl);
+  }
+
+  _updateName() {
+    String name = _controllerName.text;
+    Firestore db = Firestore.instance;
+    Map<String, dynamic> updateName = {'name': name};
+    db.collection('users').document(_idUserLogged).updateData(updateName);
   }
 
   //Recuperando dados do usuário
@@ -83,6 +100,21 @@ class _ConfigState extends State<Config> {
     FirebaseAuth auth = FirebaseAuth.instance;
     FirebaseUser userLogged = await auth.currentUser();
     _idUserLogged = userLogged.uid;
+
+    //Recuperando nome do usuário
+    Firestore db = Firestore.instance;
+    DocumentSnapshot snapshot =
+        await db.collection('users').document(_idUserLogged).get();
+
+    Map<String, dynamic> recoveredData = snapshot.data;
+    _controllerName.text = recoveredData['name'];
+
+    //Verificando se a url da imagem existe
+    if (recoveredData['urlImage'] != null) {
+      setState(() {
+        _recoveredUrlImage = recoveredData['urlImage'];
+      });
+    }
   }
 
   @override
@@ -156,6 +188,9 @@ class _ConfigState extends State<Config> {
                   padding: EdgeInsets.fromLTRB(0, 10, 0, 50),
                   child: TextField(
                     controller: _controllerName,
+                    /*onChanged: (texto){
+                      _updateName(texto);
+                    },*/
                     keyboardType: TextInputType.text,
                     textAlign: TextAlign.center,
                     style: TextStyle(
@@ -166,7 +201,7 @@ class _ConfigState extends State<Config> {
                     decoration: InputDecoration(
                       border: InputBorder.none,
                       contentPadding: EdgeInsets.fromLTRB(30, 14, 30, 14),
-                      hintText: 'Vitória Silva',
+                      hintText: '',
                       filled: true,
                       fillColor: Colors.transparent,
                     ),
@@ -184,7 +219,9 @@ class _ConfigState extends State<Config> {
                   padding: EdgeInsets.fromLTRB(30, 12, 30, 12),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30)),
-                  onPressed: () {},
+                  onPressed: () {
+                    _updateName();
+                  },
                 ),
                 Container(
                   padding: EdgeInsets.only(top: 10, bottom: 10),
