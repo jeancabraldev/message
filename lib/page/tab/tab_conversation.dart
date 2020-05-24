@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:message/model/conversation.dart';
+import 'package:message/model/user.dart';
 
 class TabConversation extends StatefulWidget {
   @override
@@ -7,6 +8,7 @@ class TabConversation extends StatefulWidget {
 }
 
 class _TabConversationState extends State<TabConversation> {
+
   List<Conversation> listConversation = [
     Conversation('Vitória Silva', 'Olá tudo bem!',
         'https://firebasestorage.googleapis.com/v0/b/message-9fad0.appspot.com/o/profile%2Fperfil1.jpg?alt=media&token=c9707b0d-87f5-47fe-b887-fe3cae3ace53'),

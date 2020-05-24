@@ -151,13 +151,15 @@ class _LoginState extends State<Login> {
                     keyboardType: TextInputType.emailAddress,
                     style: TextStyle(fontSize: 20, fontFamily: 'Montserrat'),
                     decoration: InputDecoration(
-                        contentPadding: EdgeInsets.fromLTRB(30, 14, 30, 14),
-                        hintText: 'E-mail',
-                        filled: true,
-                        fillColor: Colors.white,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
-                        )),
+                      contentPadding: EdgeInsets.fromLTRB(30, 14, 30, 14),
+                      hintText: 'E-mail',
+                      filled: true,
+                      fillColor: Colors.white,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      prefixIcon: Icon(Icons.email)
+                    ),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 10, bottom: 20),
@@ -166,12 +168,15 @@ class _LoginState extends State<Login> {
                       keyboardType: TextInputType.text,
                       style: TextStyle(fontSize: 20, fontFamily: 'Montserrat'),
                       decoration: InputDecoration(
-                          contentPadding: EdgeInsets.fromLTRB(30, 14, 30, 14),
-                          hintText: 'Senha',
-                          filled: true,
-                          fillColor: Colors.white,
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(30))),
+                        contentPadding: EdgeInsets.fromLTRB(30, 14, 30, 14),
+                        hintText: 'Senha',
+                        filled: true,
+                        fillColor: Colors.white,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        prefixIcon: Icon(Icons.lock),
+                      ),
                       obscureText: true,
                     ),
                   ),

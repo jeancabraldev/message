@@ -14,6 +14,9 @@ class MyApp extends StatelessWidget {
         primaryColor: linearGradientDark,
         accentColor: linearGradientClear,
         fontFamily: 'Montserrat',
+        tabBarTheme: TabBarTheme(
+          unselectedLabelStyle: TextStyle(fontFamily: 'Montserrat'),
+        ),
       ),
       title: 'Message',
       debugShowCheckedModeBanner: false,

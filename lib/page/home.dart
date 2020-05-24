@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:message/page/login.dart';
 import 'package:message/page/tab/tab_contact.dart';
 import 'package:message/page/tab/tab_conversation.dart';
 import 'package:message/route/generating_route.dart';
@@ -25,10 +24,21 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     });
   }
 
+  //Verificando se o usuário esta logado
+  Future _checkUserLogin() async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    FirebaseUser userLogin = await auth.currentUser();
+
+    if (userLogin == null) {
+      Navigator.pushReplacementNamed(context, GeneratingRoute.ROUTE_LOGIN);
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     _recoverUserData();
+    _checkUserLogin();
     _controllerTab = TabController(length: 2, vsync: this);
   }
 
@@ -62,7 +72,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             controller: _controllerTab,
             indicatorColor: Colors.white,
             tabs: <Widget>[
-              Tab(text: 'Conversas',),
+              Tab(text: 'Conversas'),
               Tab(text: 'Contatos'),
             ],
           ),

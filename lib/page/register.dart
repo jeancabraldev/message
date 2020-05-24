@@ -5,7 +5,6 @@ import 'package:message/model/user.dart';
 import 'package:message/route/generating_route.dart';
 import 'package:message/util/color.dart';
 
-
 import '../widget/path.dart';
 
 class Register extends StatefulWidget {
@@ -172,13 +171,15 @@ class _RegisterState extends State<Register> {
                     keyboardType: TextInputType.text,
                     style: TextStyle(fontSize: 20, fontFamily: 'Montserrat'),
                     decoration: InputDecoration(
-                        contentPadding: EdgeInsets.fromLTRB(30, 14, 30, 14),
-                        hintText: 'Nome',
-                        filled: true,
-                        fillColor: Colors.white,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
-                        )),
+                      contentPadding: EdgeInsets.fromLTRB(30, 14, 30, 14),
+                      hintText: 'Usuário',
+                      filled: true,
+                      fillColor: Colors.white,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      prefixIcon: Icon(Icons.person)
+                    ),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 10, bottom: 10),
@@ -192,7 +193,9 @@ class _RegisterState extends State<Register> {
                           filled: true,
                           fillColor: Colors.white,
                           border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(30))),
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          prefixIcon: Icon(Icons.email)),
                     ),
                   ),
                   TextField(
@@ -205,7 +208,9 @@ class _RegisterState extends State<Register> {
                         filled: true,
                         fillColor: Colors.white,
                         border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(30))),
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        prefixIcon: Icon(Icons.lock)),
                     obscureText: true,
                   ),
                   Padding(

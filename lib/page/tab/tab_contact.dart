@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:message/model/conversation.dart';
+import 'package:message/model/user.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:message/route/generating_route.dart';
 
 class TabContact extends StatefulWidget {
   @override
@@ -7,40 +10,100 @@ class TabContact extends StatefulWidget {
 }
 
 class _TabContactState extends State<TabContact> {
-  List<Conversation> listContatct = [
-    Conversation('Vitória Silva', 'Olá tudo bem!',
-        'https://firebasestorage.googleapis.com/v0/b/message-9fad0.appspot.com/o/profile%2Fperfil1.jpg?alt=media&token=c9707b0d-87f5-47fe-b887-fe3cae3ace53'),
-    Conversation('Pedro Bassam', 'Como você esta?',
-        'https://firebasestorage.googleapis.com/v0/b/message-9fad0.appspot.com/o/profile%2Fperfil2.jpg?alt=media&token=d7aab1ca-3bf0-4d4e-9539-56dd424a9155'),
-    Conversation('Maria Betânia', 'Oi',
-        'https://firebasestorage.googleapis.com/v0/b/message-9fad0.appspot.com/o/profile%2Fperfil3.jpg?alt=media&token=7b84333e-d343-4916-a8fc-2c87799492fb'),
-    Conversation('Joaquim Fenix', 'Joker',
-        'https://firebasestorage.googleapis.com/v0/b/message-9fad0.appspot.com/o/profile%2Fperfil4.jpg?alt=media&token=8461e8d9-3a74-4e0c-a381-ec8491eaf7e3'),
-    Conversation('Jamilton Soares', 'Flutter',
-        'https://firebasestorage.googleapis.com/v0/b/message-9fad0.appspot.com/o/profile%2Fperfil5.jpg?alt=media&token=0c9bcbed-924d-46df-89c1-a0ab9ae81c71')
-  ];
+  String _idUserLogged;
+  String _emailUserLoggerd;
+
+  Future<List<User>> _recoverContact() async {
+    Firestore db = Firestore.instance;
+    QuerySnapshot querySnapshot = await db.collection('users').getDocuments();
+
+    List<User> listContact = List();
+    //Percorrendo a lista de usuários cadastrados
+    for (DocumentSnapshot item in querySnapshot.documents) {
+      var info = item.data;
+      /*
+      Verificandp se o usuário esta logado, caso esteja seus dados
+      não serão exibidos na lista de contatos
+      */
+      if (info['email'] == _emailUserLoggerd) continue;
+      User user = User();
+      user.urlImage = info['urlImage'];
+      user.name = info['name'];
+      user.email = info['email'];
+      listContact.add(user);
+    }
+    return listContact;
+  }
+
+  //Recuperando informações do usuário logado
+  _recoverUserData() async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    FirebaseUser userLogged = await auth.currentUser();
+    _idUserLogged = userLogged.uid;
+    _emailUserLoggerd = userLogged.email;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _recoverUserData();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-        itemCount: listContatct.length,
-        itemBuilder: (context, index) {
-          Conversation conversation = listContatct[index];
-          return ListTile(
-            contentPadding: EdgeInsets.fromLTRB(16, 8, 16, 8),
-            leading: CircleAvatar(
-              maxRadius: 30,
-              backgroundColor: Colors.grey,
-              backgroundImage: NetworkImage(conversation.image),
-            ),
-            title: Text(
-              conversation.name,
-              style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold
+    return FutureBuilder<List<User>>(
+      future: _recoverContact(),
+      builder: (context, snapshot) {
+        switch (snapshot.connectionState) {
+          case ConnectionState.none:
+          case ConnectionState.waiting:
+            return Container(
+              padding: EdgeInsets.only(top: 200),
+              child: Center(
+                child: Column(
+                  children: <Widget>[
+                    CircularProgressIndicator(),
+                  ],
+                ),
               ),
-            ),
-          );
-        });
+            );
+            break;
+          case ConnectionState.active:
+          case ConnectionState.done:
+            return Padding(
+              padding: const EdgeInsets.only(top: 20),
+              child: ListView.builder(
+                  itemCount: snapshot.data.length,
+                  itemBuilder: (_, index) {
+                    List<User> listItems = snapshot.data;
+                    User user = listItems[index];
+
+                    return ListTile(
+                      onTap: () {
+                        Navigator.pushNamed(
+                            context, GeneratingRoute.ROUTE_MESSAGE,
+                            arguments: user);
+                      },
+                      contentPadding: EdgeInsets.fromLTRB(16, 8, 16, 8),
+                      leading: CircleAvatar(
+                        maxRadius: 30,
+                        backgroundColor: Colors.black38,
+                        backgroundImage: user.urlImage != null
+                            ? NetworkImage(user.urlImage)
+                            : null,
+                      ),
+                      title: Text(
+                        user.name,
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                    );
+                  }),
+            );
+            break;
+        }
+        return null;
+      },
+    );
   }
 }
